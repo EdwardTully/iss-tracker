@@ -9,8 +9,18 @@ import {
 import { LeafletTrackingMarker } from "react-leaflet-tracking-marker";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
+import airplaneIcon from './airplane.png'
+import L from 'leaflet'
+
 
 function Map() {
+
+  const icon = L.icon({
+    iconSize: [45,45],
+    pupupAnchor: [2,-20],
+    iconUrl: airplaneIcon,
+  })
+
   const mapRef = useRef(null);
   const latitude = 51.505;
   const longitude = -0.09;
@@ -24,6 +34,7 @@ function Map() {
   const [vel, setVel] = useState("");
   const [alt, setAlt] = useState("");
 
+
   const getPosition = async () => {
     await axios
       .get(url)
@@ -32,13 +43,17 @@ function Map() {
         setMlong(res.data.longitude);
         setVel(res.data.velocity);
         setAlt(res.data.altitude);
-        console.log(res.data);
+        console.log(res.data)
+        let postn = [res.data.latitude, res.data.longitude];
+        console.log(postn)
       })
-      .then(console.log(alt));
-  };
+    
+      
+    }
 
   const eventHandler = () => {
     setInterval(getPosition, 10000);
+  
   };
 
   const eventHandlerC = () => {
@@ -49,7 +64,7 @@ function Map() {
     <div>
       <div id="map">
         <button type="button" onClick={() => eventHandler()}>
-          Find ISS
+          Start Tracking
         </button>
         <button type="button" onClick={() => eventHandlerC()}>
           Stop
@@ -78,7 +93,14 @@ function Map() {
               pathOptions={greenOptions}
               radius={100000}
             />
-           
+
+            <LeafletTrackingMarker
+              icon = {icon}
+              
+              position={[mLat, mLong]}
+              duration={1000}
+              keepAtCenter={true}
+            ></LeafletTrackingMarker>
           </LayerGroup>
 
           {/* Additional map layers or components can be added here */}
@@ -90,11 +112,13 @@ function Map() {
 
 export default Map;
 
-//previousPosition={prevPos}
-/*<LeafletTrackingMarker
-           
-position={[mLat, mLong]}
-
-duration={1000}
-keepAtCenter={true}
-></LeafletTrackingMarker>*/
+//  const [prevPos, setPrevPos]=useState([])
+/*  .then(
+        
+        setPrevPos((postn) => {
+         console.log(prevPos)
+          return {
+            ...prevPos,
+            postn,
+          };
+        }))*/
