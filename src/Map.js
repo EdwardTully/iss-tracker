@@ -73,7 +73,7 @@ function Map() {
         <h3>
           ISS Satellite: Current Latitude: {Number(mLat).toFixed(3)} Longitude:{" "}
           {Number(mLong).toFixed(3)} Velocity: {Number(vel).toFixed(2)}{" "}
-          Altitude: {Number(alt).toFixed(2)} miles
+          Altitude: {Number(alt).toFixed(2)} Km
         </h3>
         <MapContainer
           className="mapcont"
